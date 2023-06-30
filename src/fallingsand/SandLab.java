@@ -11,6 +11,7 @@ public class SandLab
     public static final int BUTTON2 = 3;
     public static final int BUTTON3 = 4;
     public static final int BOX = 5;
+    public static final int BUTTON4 = 6;
 
     //do not add any more fields
     private int[][] grid;
@@ -52,35 +53,45 @@ public class SandLab
     
     
     
-    int[][] button1 = {{25, 110}, {24, 110}, {24, 109}, {24, 108}, {23, 110}};
+    int[][] button1 = {{25, 105}, {24, 105}, {24, 104}, {24, 103}, {23, 105}};
     int[][] button2 = {{35, 110}, {36, 110}, {37, 110}, {35, 109}, {35, 111}};    
     int[][] button3 = {{13, 110}, {12, 110}, {11, 110}, {13, 109}, {13, 111}};
+    int[][] button4 = {{25, 115}, {24, 115}, {24, 116}, {24, 117}, {23, 115}};
     
     int[][] box = {{50, 50}, {50, 51}, {51, 50}, {51, 51}};
     
     //called when the user clicks on a location using the given tool
-    private void locationClicked(int row, int col, int tool)
+    private void locationClicked(int row, int col, int tool, int j)
             
     {
-        if (grid[row][col] == BUTTON && (int)(Math.random() * 100) == 45) {
+        if (grid[row][col] == BUTTON && j % 10 == 0 && box[0][1] > 0) {
             System.out.println("Clicked Button");
             for (int i = 0; i < box.length; i++) {
                 grid[box[i][1]][box[i][0]] = EMPTY;
                 box[i][1] -= 1;
             }
         }
-        if (grid[row][col] == BUTTON2 && (int)(Math.random() * 100) == 45) {
+        if (grid[row][col] == BUTTON2 && j % 10 == 0 && box[0][0] < COLUMNS - 2) {
             System.out.println("Clicked Button");
             for (int i = 0; i < box.length; i++) {
                 grid[box[i][1]][box[i][0]] = EMPTY;
                 box[i][0] += 1;
+                System.out.println(box[i][0]);
             }
         }
-        if (grid[row][col] == BUTTON3 && (int)(Math.random() * 100) == 45) {
+        if (grid[row][col] == BUTTON3 && j % 10 == 0 && box[2][0] > 1) {
             System.out.println("Clicked Button");
             for (int i = 0; i < box.length; i++) {
                 grid[box[i][1]][box[i][0]] = EMPTY;
                 box[i][0] -= 1;
+                System.out.println(box[i][0]);
+            }
+        }
+        if (grid[row][col] == BUTTON4 && j % 10 == 0 && box[3][1] < ROWS - 1) {
+            System.out.println("Clicked Button");
+            for (int i = 0; i < box.length; i++) {
+                grid[box[i][1]][box[i][0]] = EMPTY;
+                box[i][1] += 1;
             }
         }
     };
@@ -118,6 +129,10 @@ public class SandLab
                 {
                     display.setColor(row, column, metal);
                 }
+                if (grid[row][column] == BUTTON4)
+                {
+                    display.setColor(row, column, metal);
+                }
                 if (grid[row][column] == BOX)
                 {
                     display.setColor(row, column, metal);
@@ -127,17 +142,13 @@ public class SandLab
         buttonMaker(button1, BUTTON);
         buttonMaker(button2, BUTTON2);
         buttonMaker(button3, BUTTON3);
+        buttonMaker(button4, BUTTON4);
         buttonMaker(box, BOX);
         
         int[][] matrixOne = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
         int[] matrixTwo = {1, 2, 3, 4};
         int[] multipliedMatrix = matrixMultiply(matrixOne, matrixTwo);
-        
-        for (int i = 0; i < multipliedMatrix.length; i++) {
-            System.out.print(multipliedMatrix[i]);
-            System.out.print(" ");
-        }
-        System.out.println(" ");
+
     }
 
     //called repeatedly.
@@ -146,7 +157,9 @@ public class SandLab
     {
         
     }
-
+    
+    int j = 0;
+    
     //do not modify
     public void run()
     {
@@ -164,8 +177,13 @@ public class SandLab
 
             if (mouseLoc != null)  //test if mouse clicked
             {
-                locationClicked(mouseLoc[0], mouseLoc[1], display.getTool());
+                locationClicked(mouseLoc[0], mouseLoc[1], display.getTool(), j);
             }
+            
+            if (j == 1000) {
+                j = 0;
+            }
+            j++;
             
         }
     }
