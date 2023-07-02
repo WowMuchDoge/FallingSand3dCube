@@ -62,13 +62,13 @@ public class SandLab
     }
     
     public float[] matrixMultiply(float[][] fbfMatrix, float[] fboMatrix) {
-        float[] outputMatrix = new float[4];
-        outputMatrix[0] = fbfMatrix[0][0] * fboMatrix[0] + fbfMatrix[1][0] * fboMatrix[1] + fbfMatrix[2][0] * fboMatrix[2] + fbfMatrix[3][0] * fboMatrix[3];
-        outputMatrix[1] = fbfMatrix[0][1] * fboMatrix[0] + fbfMatrix[1][1] * fboMatrix[1] + fbfMatrix[2][1] * fboMatrix[2] + fbfMatrix[3][1] * fboMatrix[3];
-        outputMatrix[2] = fbfMatrix[0][2] * fboMatrix[0] + fbfMatrix[1][2] * fboMatrix[1] + fbfMatrix[2][2] * fboMatrix[2] + fbfMatrix[3][2] * fboMatrix[3];
-        outputMatrix[3] = fbfMatrix[0][3] * fboMatrix[0] + fbfMatrix[1][3] * fboMatrix[1] + fbfMatrix[2][3] * fboMatrix[2] + fbfMatrix[3][3] * fboMatrix[3];
+        float[] outputVector = new float[4];
+        outputVector[0] = fboMatrix[0] * fbfMatrix[0][0] + fboMatrix[1] * fbfMatrix[0][1] + fboMatrix[2] * fbfMatrix[0][2] + fboMatrix[3] * fbfMatrix[0][3];
+        outputVector[1] = fboMatrix[0] * fbfMatrix[1][0] + fboMatrix[1] * fbfMatrix[1][1] + fboMatrix[2] * fbfMatrix[1][2] + fboMatrix[3] * fbfMatrix[1][3];
+        outputVector[2] = fboMatrix[0] * fbfMatrix[2][0] + fboMatrix[1] * fbfMatrix[2][1] + fboMatrix[2] * fbfMatrix[2][2] + fboMatrix[3] * fbfMatrix[2][3];
+        outputVector[3] = fboMatrix[0] * fbfMatrix[3][0] + fboMatrix[1] * fbfMatrix[3][1] + fboMatrix[2] * fbfMatrix[3][2] + fboMatrix[3] * fbfMatrix[3][3];
         
-        return outputMatrix;
+        return outputVector;
     }
     
     
@@ -204,14 +204,16 @@ public class SandLab
             }
             j++;
             float[] position = {1, 4, 3, 1};
+            float[][] pos2 = {{1, 5, 2, 3}, {1, 5, 3, 4}, {3, 2, 1, 6}, {1, 7, 8, 4}};
             float[][] matrix = perspectiveMatrix(50, 80, 120, 10, 2);
             float[] fMatrix = matrixMultiply(matrix, position);
-            for (float i : fMatrix) {
-                System.out.print(i + " ");
-            }
+            float[] mat2 = matrixMultiply(pos2, position);
+            
+            System.out.print(Arrays.toString(mat2) + " ");
+            
             System.out.println();
         }
     }
 
         
-}
+}x
