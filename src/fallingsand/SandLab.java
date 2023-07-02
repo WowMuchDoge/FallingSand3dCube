@@ -1,6 +1,7 @@
 package fallingsand;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class SandLab
 {
@@ -12,6 +13,13 @@ public class SandLab
     public static final int BUTTON3 = 4;
     public static final int BOX = 5;
     public static final int BUTTON4 = 6;
+    
+    private double cameraX;     // X position of the camera
+    private double cameraY;     // Y position of the camera
+    private double cameraZ;     // Z position of the camera
+    private double cameraYaw;   // Yaw angle of the camera (rotation around the Y axis)
+    private double cameraPitch; // Pitch angle of the camera (rotation around the X axis)
+
 
     //do not add any more fields
     private int[][] grid;
@@ -41,8 +49,20 @@ public class SandLab
         }
     }
     
-    public int[] matrixMultiply(int[][] fbfMatrix, int[] fboMatrix) {
-        int[] outputMatrix = {1, 1, 1, 1};
+    public float[][] perspectiveMatrix(float FOV, float width, float height, float zFar, float zNear) {
+        float aspectRatio = height / width;
+        float[][] returnMatrix = new float[4][4];
+        returnMatrix[0][0] = (float) (aspectRatio * (1/Math.tan(FOV / 2)));
+        returnMatrix[1][1] = (float) (1/Math.tan(FOV / 2));
+        returnMatrix[2][2] = (float) zFar / (zFar - zNear);
+        returnMatrix[2][3] = (float) (-zFar * zNear) / (zFar - zNear);
+        returnMatrix[3][2] = (float) 1.0;
+        
+        return returnMatrix;
+    }
+    
+    public float[] matrixMultiply(float[][] fbfMatrix, float[] fboMatrix) {
+        float[] outputMatrix = new float[4];
         outputMatrix[0] = fbfMatrix[0][0] * fboMatrix[0] + fbfMatrix[1][0] * fboMatrix[1] + fbfMatrix[2][0] * fboMatrix[2] + fbfMatrix[3][0] * fboMatrix[3];
         outputMatrix[1] = fbfMatrix[0][1] * fboMatrix[0] + fbfMatrix[1][1] * fboMatrix[1] + fbfMatrix[2][1] * fboMatrix[2] + fbfMatrix[3][1] * fboMatrix[3];
         outputMatrix[2] = fbfMatrix[0][2] * fboMatrix[0] + fbfMatrix[1][2] * fboMatrix[1] + fbfMatrix[2][2] * fboMatrix[2] + fbfMatrix[3][2] * fboMatrix[3];
@@ -50,6 +70,7 @@ public class SandLab
         
         return outputMatrix;
     }
+    
     
     
     
@@ -147,7 +168,6 @@ public class SandLab
         
         int[][] matrixOne = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
         int[] matrixTwo = {1, 2, 3, 4};
-        int[] multipliedMatrix = matrixMultiply(matrixOne, matrixTwo);
 
     }
 
@@ -155,7 +175,6 @@ public class SandLab
     //causes one random particle to maybe do something.
     public void step()
     {
-        
     }
     
     int j = 0;
@@ -184,7 +203,13 @@ public class SandLab
                 j = 0;
             }
             j++;
-            
+            float[] position = {1, 4, 3, 1};
+            float[][] matrix = perspectiveMatrix(50, 80, 120, 10, 2);
+            float[] fMatrix = matrixMultiply(matrix, position);
+            for (float i : fMatrix) {
+                System.out.print(i + " ");
+            }
+            System.out.println();
         }
     }
 
